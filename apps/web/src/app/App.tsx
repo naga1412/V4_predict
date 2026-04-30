@@ -1,4 +1,5 @@
 import { useEngine } from "../hooks/useEngine.js";
+import { useFeed } from "../hooks/useFeed.js";
 import { useAppStore } from "../store/appStore.js";
 import { Topbar } from "../components/Topbar.js";
 import { ChartPane } from "../components/ChartPane.js";
@@ -11,6 +12,7 @@ import { Footer } from "./Footer.js";
 
 export function App() {
   useEngine();
+  useFeed();
 
   const activeTab = useAppStore((s) => s.activeTab);
 

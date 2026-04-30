@@ -49,3 +49,7 @@ export {
 
 // Learn — M-LEARN-3
 export { evaluate as evaluateVeto, applyVetoToOrch, applyToOrch } from "./learn/metaVeto.js";
+
+// Feed — Binance public market-data
+export { fetchKlines, loadHistory, openKlineStream, toBinanceSymbol } from "./feed/binance.js";
+export type { KlineCandle, KlineStream } from "./feed/binance.js";
