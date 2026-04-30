@@ -26,6 +26,28 @@ export { DB_NAME, DB_VERSION, STORES, MIGRATIONS } from "./data/schema.js";
 // TA math
 export { RollingWindow, EMAState, WilderState, RollingMax, RollingMin, trueRange, round, clamp, lastFinite } from "./ta/math.js";
 
+// TA patterns (Wave 7)
+export {
+  isDoji, isHammer, isInvertedHammer, isShootingStar,
+  isBullishEngulfing, isBearishEngulfing,
+  isBullishHarami, isBearishHarami,
+  isMorningStar, isEveningStar,
+  detectAll as detectCandlePatterns,
+  detectChartPatterns, summarizeChartPattern,
+} from "./ta/patterns/index.js";
+export type {
+  CandleOpts, CandlePatternHit,
+  PatternAnchor, ChartPattern, DetectChartOpts, DetectChartResult, ChartPatternSummary,
+} from "./ta/patterns/index.js";
+
+// TA volume profile (Wave 7)
+export {
+  computeVolumeProfile, summarizeProfile, tpoLetter, bucketIndex, valueArea,
+} from "./ta/profile/volumeProfileEnhanced.js";
+export type {
+  VolumeProfileOpts, VPRow, VPBundle, VPSummary, ValueAreaResult,
+} from "./ta/profile/volumeProfileEnhanced.js";
+
 // TA structure (Wave 6)
 export {
   findPivots, classifyPivots, currentTrend,
