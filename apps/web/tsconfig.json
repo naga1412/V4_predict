@@ -10,5 +10,10 @@
     }
   },
   "include": ["src/**/*", "../../packages/engine/src/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": [
+    "dist",
+    "node_modules",
+    "../../packages/engine/src/**/*.test.ts",
+    "../../packages/engine/src/test-setup.ts"
+  ]
 }

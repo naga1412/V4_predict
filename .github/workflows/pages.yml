@@ -37,7 +37,7 @@ jobs:
       - name: Build
         working-directory: apps/web
         env:
-          VITE_BASE_PATH: /v4_predict/
+          VITE_BASE_PATH: /V4_predict/
         run: npm run build
 
       - uses: actions/configure-pages@v5
