@@ -26,6 +26,29 @@ export { DB_NAME, DB_VERSION, STORES, MIGRATIONS } from "./data/schema.js";
 // TA math
 export { RollingWindow, EMAState, WilderState, RollingMax, RollingMin, trueRange, round, clamp, lastFinite } from "./ta/math.js";
 
+// TA structure (Wave 6)
+export {
+  findPivots, classifyPivots, currentTrend,
+  detectBreaks,
+  detectFVG,
+  detectOrderBlocks,
+  detectLiquidity,
+  premiumDiscount,
+  sessionOf, tagSessions, sessionStats, SESSIONS,
+  detectTrendlines, positionInChannel, leastSquares, touchPoints,
+} from "./ta/structure/index.js";
+export type {
+  Bar, Pivot, PivotKind, PivotClass, Trend,
+  BreakEvent,
+  FVGZone, FVGResult,
+  OrderBlock, OrderBlockOpts,
+  EQLevel, LiquiditySweep, LiquidityResult,
+  PremiumDiscountInfo, PremiumDiscountZones,
+  TLLine, TLPoint, TLChannel, TLBreakout, TLMeta, TLResult,
+  SRLevel, SessionName, SessionStats,
+} from "./ta/structure/index.js";
+export { clusterLevels } from "./ta/levels/supportResistance.js";
+
 // TA indicators (Wave 5)
 export {
   sma, ema, wma, dema, tema,
