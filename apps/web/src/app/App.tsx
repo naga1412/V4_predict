@@ -18,6 +18,8 @@ import { MTFBiasPanel } from "../components/MTFBiasPanel.js";
 import { NewsPanel } from "../components/NewsPanel.js";
 import { MetaBrainCard } from "../components/MetaBrainCard.js";
 import { MistakeLedgerView } from "../components/MistakeLedgerView.js";
+import { ScannerTab } from "../components/ScannerTab.js";
+import { BacktestTab } from "../components/BacktestTab.js";
 import { Footer } from "./Footer.js";
 
 const tabStyle = (visible: boolean): CSSProperties => ({
@@ -49,10 +51,10 @@ export function App() {
             <ChartPane />
           </div>
           <div style={tabStyle(activeTab === "scanner")}>
-            <PlaceholderTab label="Scanner" detail="Multi-symbol regime + setup ranking — coming soon" />
+            <ScannerTab />
           </div>
           <div style={tabStyle(activeTab === "backtest")}>
-            <PlaceholderTab label="Backtest" detail="Walk-forward backtest with equity curve — coming soon" />
+            <BacktestTab />
           </div>
           <div style={tabStyle(activeTab === "news")}>
             <NewsPanel />

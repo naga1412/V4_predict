@@ -15,6 +15,14 @@ vi.mock("../hooks/useTAEngine.js", () => ({ useTAEngine: () => undefined }));
 vi.mock("../components/ChartPane.js", () => ({
   ChartPane: () => <div data-testid="chart-pane">CHART_PANE</div>,
 }));
+// Scanner and Backtest fetch from Binance on mount — mock them out for the
+// store-driven tab-routing tests.
+vi.mock("../components/ScannerTab.js", () => ({
+  ScannerTab: () => <div data-testid="scanner-tab">Multi-symbol regime + setup ranking</div>,
+}));
+vi.mock("../components/BacktestTab.js", () => ({
+  BacktestTab: () => <div data-testid="backtest-tab">Walk-forward backtest with equity curve</div>,
+}));
 
 import { App } from "./App.js";
 

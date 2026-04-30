@@ -22,6 +22,7 @@ export function ChartPane() {
 
   const symbol    = useAppStore((s) => s.symbol);
   const timeframe = useAppStore((s) => s.timeframe);
+  const activeTab = useAppStore((s) => s.activeTab);
 
   // Initialise chart once
   useEffect(() => {
@@ -94,6 +95,27 @@ export function ChartPane() {
       volRef.current    = null;
     };
   }, []);
+
+  // When the chart tab becomes visible, force a re-measure. display:none ↔
+  // display:flex doesn't always trip ResizeObserver in time on first switch,
+  // and a chart created while the parent was display:none has 0×0 dimensions.
+  useEffect(() => {
+    if (activeTab !== "chart") return;
+    const id = window.setTimeout(() => {
+      if (chartRef.current && containerRef.current) {
+        chartRef.current.applyOptions({
+          width: containerRef.current.clientWidth,
+          height: containerRef.current.clientHeight,
+        });
+        try {
+          chartRef.current.timeScale().fitContent();
+        } catch {
+          // ignore — fitContent throws on empty data
+        }
+      }
+    }, 50);
+    return () => window.clearTimeout(id);
+  }, [activeTab]);
 
   // On (symbol, tf) change — clear, then re-hydrate from cache if available
   // so the chart never blank-flashes if useFeed already loaded the history
