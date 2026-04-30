@@ -26,6 +26,24 @@ export { DB_NAME, DB_VERSION, STORES, MIGRATIONS } from "./data/schema.js";
 // TA math
 export { RollingWindow, EMAState, WilderState, RollingMax, RollingMin, trueRange, round, clamp, lastFinite } from "./ta/math.js";
 
+// TA indicators (Wave 5)
+export {
+  sma, ema, wma, dema, tema,
+  rsi, macd, stochastic, roc,
+  atr, adx,
+  bbands, keltner,
+  vwap, obv, cmf,
+  mfi, cci, williamsR, psar, ichimoku,
+} from "./ta/indicators/index.js";
+export type {
+  MACDResult, StochResult,
+  ADXResult,
+  Bands,
+  VWAPOpts,
+  PSAROpts, PSARResult,
+  IchimokuOpts, IchimokuResult,
+} from "./ta/indicators/index.js";
+
 // Learn — M-LEARN-1
 export {
   classifyError,
