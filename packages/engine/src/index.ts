@@ -164,6 +164,42 @@ export { TAEngine } from "./ta/engine.js";
 export type { TAEngineOptions, TAOutput } from "./ta/engine.js";
 export { TAEngineProxy } from "./ta/engineProxy.js";
 
+// Validation + monitor + drift (Wave 13)
+export {
+  savePrediction, loadPrediction, deletePrediction, countPredictions,
+  listAllPredictions, listPredictions, duePredictions, markValidated,
+  clearPredictions,
+  saveValidation, loadValidation, countValidations,
+  listAllValidations, listValidations, recentValidations,
+  clearValidations, clearAll as clearAllPredictions,
+  TF_MS, tfMs, nextCandleOpen, nextCloseAt, msUntilNextClose,
+  realizedDirection, realizedReturn,
+  verdictFor, validateBatch, summarizeVerdicts,
+  newPageHinkley, updatePageHinkley, rollingAccuracy, newEWMA, updateEWMA,
+  drainOnce as monitorDrainOnce, startIntervalMonitor,
+} from "./validation/index.js";
+export type {
+  PredictionRow, ValidationRow, PredictionFilter, ValidationFilter, PredictionKind,
+  OHLCBar, BaseVerdict, Verdict as ValidatorVerdict,
+  DirectionVerdict, ReturnVerdict, IntervalVerdict, SetVerdict,
+  VerdictSummary, BatchResult, CandleLookup,
+  PageHinkleyState, PageHinkleyOpts, EWMAState,
+  MonitorOpts, MonitorResult, IntervalMonitorOpts, IntervalMonitor,
+} from "./validation/index.js";
+
+// Modules + Orchestrator (Wave 12)
+export {
+  MODULES, MODULES_BY_ID, listModules, getModule,
+  runModules,
+  neutral as moduleNeutral, clampSignal as moduleClampSignal,
+} from "./modules/index.js";
+export type {
+  Signal as ModuleSignal,
+  Module, ModuleMeta, ModuleCtx,
+  AggregatedSignal, OrchestratorOptions,
+  OrchestratorOutput as OrchestratorRunOutput,
+} from "./modules/index.js";
+
 // Regime (Wave 8)
 export {
   classifyRegime, classifySeries, DEFAULT_THRESHOLDS,
