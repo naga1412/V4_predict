@@ -1,5 +1,6 @@
 import { useEngine } from "../hooks/useEngine.js";
 import { useFeed } from "../hooks/useFeed.js";
+import { useTAEngine } from "../hooks/useTAEngine.js";
 import { useAppStore } from "../store/appStore.js";
 import { Topbar } from "../components/Topbar.js";
 import { ChartPane } from "../components/ChartPane.js";
@@ -13,6 +14,7 @@ import { Footer } from "./Footer.js";
 export function App() {
   useEngine();
   useFeed();
+  useTAEngine();
 
   const activeTab = useAppStore((s) => s.activeTab);
 
