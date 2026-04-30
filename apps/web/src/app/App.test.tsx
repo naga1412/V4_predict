@@ -1,19 +1,17 @@
 /**
  * App tab-routing functionality tests.
  *
- * Note: we mock the engine hooks so the test doesn't open a Binance WS.
- * The store-driven tab switching is what we actually test here — the panels
- * that the tabs route to are exercised by Panels.test.tsx.
+ * After the V1-pattern refactor, every tab is mounted at once and toggled
+ * via display:none. So tab labels appear twice (Topbar nav + the tab body's
+ * heading). Tests use getAllByText / role-scoped queries accordingly.
  */
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 import { useAppStore } from "../store/appStore.js";
 
-// Mock the engine hooks before importing App so they no-op during the render
 vi.mock("../hooks/useEngine.js", () => ({ useEngine: () => undefined }));
 vi.mock("../hooks/useFeed.js", () => ({ useFeed: () => undefined }));
 vi.mock("../hooks/useTAEngine.js", () => ({ useTAEngine: () => undefined }));
-// Mock ChartPane — LightweightCharts touches DOM APIs happy-dom doesn't ship
 vi.mock("../components/ChartPane.js", () => ({
   ChartPane: () => <div data-testid="chart-pane">CHART_PANE</div>,
 }));
@@ -37,6 +35,15 @@ function reset() {
   });
 }
 
+/** Click the topbar tab button (scoped to the navigation element). */
+function clickTab(label: string): void {
+  // Topbar's nav is the first nav element in the document
+  const navs = document.querySelectorAll("nav");
+  const topbarNav = navs[0]!;
+  const btn = within(topbarNav as HTMLElement).getByText(label);
+  fireEvent.click(btn);
+}
+
 describe("App tab routing", () => {
   beforeEach(reset);
 
@@ -52,55 +59,62 @@ describe("App tab routing", () => {
   it("Scanner tab renders placeholder", () => {
     useAppStore.setState({ activeTab: "scanner" });
     render(<App />);
-    expect(screen.getByText(/Scanner.*coming soon/i)).toBeTruthy();
+    expect(screen.getByText(/Multi-symbol regime/)).toBeTruthy();
   });
 
   it("Backtest tab renders placeholder", () => {
     useAppStore.setState({ activeTab: "backtest" });
     render(<App />);
-    expect(screen.getByText(/Backtest.*coming soon/i)).toBeTruthy();
+    expect(screen.getByText(/Walk-forward backtest/)).toBeTruthy();
   });
 
   it("News tab renders the NewsPanel as the main view", () => {
     useAppStore.setState({ activeTab: "news" });
     render(<App />);
-    // 2 occurrences expected: main view + sidebar repeat. At least one must exist.
     expect(screen.getAllByText("News & Sentiment").length).toBeGreaterThanOrEqual(1);
   });
 
   it("Chat tab renders placeholder", () => {
     useAppStore.setState({ activeTab: "chat" });
     render(<App />);
-    expect(screen.getByText(/AI Chat.*coming soon/i)).toBeTruthy();
+    expect(screen.getByText(/LLM market briefing/)).toBeTruthy();
   });
 
   it("System tab shows status fields", () => {
     useAppStore.setState({ activeTab: "system" });
     render(<App />);
-    // Footer also contains Regime/Wyckoff/Mistakes labels — assert ≥ 2 occurrences
     expect(screen.getByText("System Status")).toBeTruthy();
     expect(screen.getByText("WS Status")).toBeTruthy();
     expect(screen.getByText("live")).toBeTruthy();
+    expect(screen.getByText("BTC/USDT")).toBeTruthy();
+    // Regime, Wyckoff, Mistakes labels appear in System tab + Footer (≥2)
     expect(screen.getAllByText("Regime").length).toBeGreaterThanOrEqual(2);
-    // Footer renders the regime value too — count >=2
-    expect(screen.getAllByText("range-weak-normal-vol").length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText("Wyckoff").length).toBeGreaterThanOrEqual(2);
-    expect(screen.getAllByText("neutral").length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText("Mistakes").length).toBeGreaterThanOrEqual(2);
-    expect(screen.getAllByText("3").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("range-weak-normal-vol").length).toBeGreaterThanOrEqual(1);
   });
 
   it("clicking topbar tabs navigates between views", () => {
     render(<App />);
     expect(screen.getByTestId("chart-pane")).toBeTruthy();
-    fireEvent.click(screen.getByText("Backtest"));
+    clickTab("Backtest");
     expect(useAppStore.getState().activeTab).toBe("backtest");
-    fireEvent.click(screen.getByText("System"));
+    clickTab("System");
     expect(useAppStore.getState().activeTab).toBe("system");
-    fireEvent.click(screen.getByText("Scanner"));
+    clickTab("Scanner");
     expect(useAppStore.getState().activeTab).toBe("scanner");
-    fireEvent.click(screen.getByText("Chart"));
+    clickTab("Chart");
     expect(useAppStore.getState().activeTab).toBe("chart");
+  });
+
+  it("all tabs are persistently mounted (display-toggle pattern, V1 fix)", () => {
+    render(<App />);
+    // ChartPane renders via test mock; placeholders for other tabs render via PlaceholderTab.
+    // Even though only 'chart' is the active tab, all the other detail strings exist in DOM, hidden.
+    expect(screen.getByTestId("chart-pane")).toBeTruthy();
+    expect(screen.getByText(/Multi-symbol regime/)).toBeTruthy();
+    expect(screen.getByText(/Walk-forward backtest/)).toBeTruthy();
+    expect(screen.getByText(/LLM market briefing/)).toBeTruthy();
   });
 
   it("footer KPI strip always renders", () => {

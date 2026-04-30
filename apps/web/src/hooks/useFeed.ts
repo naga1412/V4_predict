@@ -9,9 +9,10 @@
  */
 import { useEffect } from "react";
 import { loadHistory, openKlineStream, EventBus } from "@v4/engine";
-import type { KlineStream } from "@v4/engine";
+import type { KlineStream, KlineCandle } from "@v4/engine";
 import { useAppStore } from "../store/appStore.js";
 import type { LivePrice } from "../store/appStore.js";
+import { setCachedHistory, clearCachedHistory } from "../store/candleCache.js";
 
 export function useFeed(): void {
   const symbol      = useAppStore((s) => s.symbol);
@@ -26,10 +27,26 @@ export function useFeed(): void {
     });
   }, [setLivePrice]);
 
+  // Snapshot every chart:history into the cache so a remounted ChartPane
+  // can re-hydrate without waiting for the next REST round-trip.
+  useEffect(() => {
+    return EventBus.on<{ symbol: string; tf: string; candles: KlineCandle[] }>(
+      "chart:history",
+      ({ symbol, tf, candles }) => {
+        if (symbol && tf && Array.isArray(candles)) {
+          setCachedHistory(symbol, tf, candles);
+        }
+      }
+    );
+  }, []);
+
   // history + websocket per (symbol, tf)
   useEffect(() => {
     let stream: KlineStream | null = null;
     let cancelled = false;
+
+    // Drop cached candles for the previous symbol/tf so a stale chart doesn't flash
+    clearCachedHistory();
 
     void loadHistory(symbol, timeframe).then(() => {
       if (cancelled) return;

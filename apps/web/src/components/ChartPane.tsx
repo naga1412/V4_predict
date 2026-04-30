@@ -3,6 +3,7 @@ import { createChart, ColorType, CrosshairMode } from "lightweight-charts";
 import type { IChartApi, ISeriesApi, CandlestickData, HistogramData } from "lightweight-charts";
 import { useAppStore } from "../store/appStore.js";
 import { useBusEvent } from "../hooks/useBus.js";
+import { getCachedHistory } from "../store/candleCache.js";
 
 interface CandlePayload {
   t: number;
@@ -94,10 +95,28 @@ export function ChartPane() {
     };
   }, []);
 
-  // Clear chart when symbol or timeframe changes
+  // On (symbol, tf) change — clear, then re-hydrate from cache if available
+  // so the chart never blank-flashes if useFeed already loaded the history
+  // while we were unmounted (or if we mount after history already arrived).
   useEffect(() => {
-    candleRef.current?.setData([]);
-    volRef.current?.setData([]);
+    if (!candleRef.current || !volRef.current) return;
+    candleRef.current.setData([]);
+    volRef.current.setData([]);
+    const cached = getCachedHistory(symbol, timeframe);
+    if (cached && cached.length > 0) {
+      const cd: CandlestickData[] = cached.map((c) => ({
+        time: (c.t / 1000) as unknown as CandlestickData["time"],
+        open: c.o, high: c.h, low: c.l, close: c.c,
+      }));
+      const vd: HistogramData[] = cached.map((c) => ({
+        time: (c.t / 1000) as unknown as HistogramData["time"],
+        value: c.v ?? 0,
+        color: c.c >= c.o ? "#26a69a44" : "#ef535044",
+      }));
+      candleRef.current.setData(cd);
+      volRef.current.setData(vd);
+      chartRef.current?.timeScale().fitContent();
+    }
   }, [symbol, timeframe]);
 
   // Receive bulk candle history

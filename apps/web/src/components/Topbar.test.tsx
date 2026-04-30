@@ -31,7 +31,7 @@ describe("Topbar", () => {
     expect(screen.getByText("Backtest")).toBeTruthy();
     expect(screen.getByText("News")).toBeTruthy();
     expect(screen.getByText("System")).toBeTruthy();
-    expect(screen.getByText("CONNECTING")).toBeTruthy();
+    expect(screen.getByText(/Connecting/)).toBeTruthy();
   });
 
   it("changes timeframe when a TF button is clicked", () => {
@@ -81,12 +81,24 @@ describe("Topbar", () => {
   it("status pill switches with wsStatus", () => {
     useAppStore.setState({ wsStatus: "live" });
     const { rerender } = render(<Topbar />);
-    expect(screen.getByText("LIVE")).toBeTruthy();
+    expect(screen.getByText("Live")).toBeTruthy();
     useAppStore.setState({ wsStatus: "reconnecting" });
     rerender(<Topbar />);
-    expect(screen.getByText("RETRY")).toBeTruthy();
+    expect(screen.getByText(/Reconnecting/)).toBeTruthy();
     useAppStore.setState({ wsStatus: "error" });
     rerender(<Topbar />);
-    expect(screen.getByText("ERROR")).toBeTruthy();
+    expect(screen.getByText("Error")).toBeTruthy();
+    useAppStore.setState({ wsStatus: "offline" });
+    rerender(<Topbar />);
+    expect(screen.getByText("Offline")).toBeTruthy();
+  });
+
+  it("hides chart-only controls (symbol picker, TFs) on non-chart tabs", () => {
+    useAppStore.setState({ activeTab: "scanner" });
+    render(<Topbar />);
+    // symbol picker button should not be rendered on Scanner
+    expect(screen.queryByText("BTC/USDT")).toBeNull();
+    // TF buttons gone too
+    expect(screen.queryByText("5m")).toBeNull();
   });
 });
