@@ -1,0 +1,250 @@
+@import "./theme.css";
+
+/* ── App shell grid ── */
+#root {
+  display: grid;
+  grid-template-rows: 46px 40px 1fr 28px;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui, "Inter", system-ui, sans-serif);
+}
+
+/* ── Main workspace: chart + sidebar ── */
+.workspace {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 1100px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    display: none;
+  }
+}
+
+/* ── Sidebar scrollable column ── */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px;
+  overflow-y: auto;
+  border-left: 1px solid var(--bg-elev-2);
+  background: var(--bg-elev-1);
+}
+
+/* ── Card base (glass effect) ── */
+.card {
+  background: var(--bg-elev-1);
+  border: 1px solid var(--bg-elev-2);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  border-bottom: 1px solid var(--bg-elev-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+/* ── Accordion ── */
+.acc-body {
+  overflow: hidden;
+  transition: max-height var(--dur-med) ease;
+}
+
+.acc-body.closed {
+  max-height: 0 !important;
+}
+
+/* ── Signal colors ── */
+.bull   { color: var(--bull); }
+.bear   { color: var(--bear); }
+.accent { color: var(--accent); }
+.dim    { color: var(--fg-dim); }
+.warn   { color: var(--warn); }
+
+/* ── Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.badge-bull   { background: color-mix(in srgb, var(--bull) 15%, transparent); color: var(--bull); }
+.badge-bear   { background: color-mix(in srgb, var(--bear) 15%, transparent); color: var(--bear); }
+.badge-accent { background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); }
+.badge-warn   { background: color-mix(in srgb, var(--warn) 15%, transparent); color: var(--warn); }
+.badge-dim    { background: color-mix(in srgb, var(--fg-dim) 15%, transparent); color: var(--fg-dim); }
+
+/* ── Mini progress bar ── */
+.prog-bar {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--bg-elev-2);
+  overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ── Two-column grid inside cards ── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.kv-label {
+  font-size: 10px;
+  color: var(--fg-dim);
+  margin-bottom: 2px;
+}
+.kv-value {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ── Footer KPI strip ── */
+.kpi-strip {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 12px;
+  font-size: 11px;
+  color: var(--fg-dim);
+  border-top: 1px solid var(--bg-elev-2);
+  background: var(--bg-elev-1);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.kpi-item { display: flex; align-items: center; gap: 4px; }
+
+/* ── Indicator rail ── */
+.indicator-rail {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--bg-elev-2);
+  background: var(--bg-elev-1);
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+.indicator-rail::-webkit-scrollbar { display: none; }
+
+.ir-btn {
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--fg-dim);
+  cursor: pointer;
+  transition: all var(--dur-fast);
+}
+.ir-btn:hover { background: var(--bg-hover); color: var(--fg); }
+.ir-btn.active {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* ── Tab bar ── */
+.tab-bar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.tab-btn {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--fg-dim);
+  cursor: pointer;
+  transition: all var(--dur-fast);
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--fg); }
+.tab-btn.active {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+}
+
+/* ── News sentiment colors ── */
+.nbull    { background: color-mix(in srgb,var(--bull) 15%,transparent); color: var(--bull); }
+.nbear    { background: color-mix(in srgb,var(--bear) 15%,transparent); color: var(--bear); }
+.nneutral { background: color-mix(in srgb,var(--fg-dim) 15%,transparent); color: var(--fg-dim); }
+.nmacro   { background: color-mix(in srgb,var(--warn) 15%,transparent); color: var(--warn); }
+
+/* ── Search modal ── */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 60px;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+.search-box {
+  width: 580px;
+  max-height: 70vh;
+  background: var(--bg-elev-1);
+  border: 1px solid var(--bg-elev-2);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.search-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--bg-elev-2);
+  color: var(--fg);
+  font-size: 15px;
+  outline: none;
+}
+.search-results { overflow-y: auto; }
+.search-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+}
+.search-result:hover { background: var(--bg-hover); }

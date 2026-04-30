@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "noEmit": true,
+    "paths": {
+      "@v4/engine": ["../../packages/engine/src/index.ts"],
+      "@v4/engine/*": ["../../packages/engine/src/*"]
+    }
+  },
+  "include": ["src/**/*", "../../packages/engine/src/**/*"],
+  "exclude": ["dist", "node_modules"]
+}
