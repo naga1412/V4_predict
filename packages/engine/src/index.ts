@@ -113,6 +113,74 @@ export {
 // Learn — M-LEARN-3
 export { evaluate as evaluateVeto, applyVetoToOrch, applyToOrch } from "./learn/metaVeto.js";
 
+// ML primitives (Wave 10)
+export {
+  mulberry32, gaussianFactory, shuffle, shuffledIndices, randInt, hashStringToU32,
+  fitZScore, fitMinMax, applyStats, clipMatrix,
+  walkForwardSplit, purgedKFold, gatherRows, gather,
+  rollingReturnStd, tripleBarrier, metaLabels, uniquenessWeights, labelDistribution,
+  MLP, paramCount, NN_VERSION,
+  saveModel, loadModel, deleteModel, countModels, listModels, latestModel, loadByRegime, clearModels,
+} from "./ml/index.js";
+export type {
+  ZScoreStats, MinMaxStats, NormStats,
+  WalkForwardOpts, SplitIndices, KFoldOpts, Fold,
+  TBLabel, BarrierTouch, TripleBarrierArgs, LabelDistribution,
+  ActName, LossName, OptimizerName, LayerConfig, MLPConfig, FitOpts, FitResult, SerializedMLP,
+  ModelKind, ModelRow, ModelFilter,
+} from "./ml/index.js";
+
+// Meta-Brain + Champion/Challenger (Wave 11)
+export {
+  aggregate as aggregateMetaBrainInput,
+  decide as metaBrainDecide,
+  pairForTraining as metaBrainPair,
+  labelForTraining as metaBrainLabel,
+  readyCount as metaBrainReadyCount,
+  maybeTrain as metaBrainMaybeTrain,
+  findChampion as metaBrainFindChampion,
+  findChallenger as metaBrainFindChallenger,
+  setRole as metaBrainSetRole,
+  status as metaBrainStatus,
+  invalidateModelCache as metaBrainInvalidateCache,
+} from "./learn/metaBrain.js";
+export type {
+  AggregateCtx, MetaBrainDecision, DecideOpts, MetaBrainStatus, MaybeTrainOpts, MaybeTrainResult,
+} from "./learn/metaBrain.js";
+export {
+  runCycle as ccRunCycle,
+  onVerdict as ccOnVerdict,
+  driftCheck as ccDriftCheck,
+  recoverIfDrifted as ccRecoverIfDrifted,
+  recentCycles as ccRecentCycles,
+  status as ccStatus,
+} from "./learn/championChallenger.js";
+export type {
+  CycleRecord, DriftState, CCStatus,
+} from "./learn/championChallenger.js";
+
+// TA Engine + Worker proxy (Wave 9)
+export { TAEngine } from "./ta/engine.js";
+export type { TAEngineOptions, TAOutput } from "./ta/engine.js";
+export { TAEngineProxy } from "./ta/engineProxy.js";
+
+// Regime (Wave 8)
+export {
+  classifyRegime, classifySeries, DEFAULT_THRESHOLDS,
+  classifyWyckoff, summarizeWyckoff, bullPct, volumeSlope, rangePct,
+  RegimeFSM,
+  computeMacroState, summarizeMacro, trendScore,
+  EventCalendar, defaultCalendar, DEFAULT_EVENTS, IMPACT,
+} from "./regime/index.js";
+export type {
+  TASnapshot, RegimeThresholds,
+  RegimeTrend, RegimeStrength, RegimeVolatility, RegimeAlignment, RegimeMomentum, RegimeBreakout,
+  RegimeDescriptor,
+  WyckoffPhase, WyckoffBias, WyckoffDescriptor,
+  MacroState, MacroLabel, MacroContribution,
+  CalendarEvent, NearbyEvent, EventWindow,
+} from "./regime/index.js";
+
 // Feed — Binance public market-data
 export { fetchKlines, loadHistory, openKlineStream, toBinanceSymbol } from "./feed/binance.js";
 export type { KlineCandle, KlineStream } from "./feed/binance.js";
