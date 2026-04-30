@@ -1,9 +1,10 @@
 @import "./theme.css";
 
-/* ── App shell grid ── */
+/* ── App shell grid ──
+   Topbar (46px) + main workspace (1fr) + footer (28px). */
 #root {
   display: grid;
-  grid-template-rows: 46px 40px 1fr 28px;
+  grid-template-rows: 46px 1fr 28px;
   height: 100dvh;
   overflow: hidden;
   background: var(--bg);
